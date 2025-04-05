@@ -1,91 +1,21 @@
-import React, { useState } from "react";
-import {
-  Layout,
-  Card,
-  Input,
-  Button,
-  Typography,
-  theme,
-  Form,
-  message,
-} from "antd";
-import styled from "styled-components";
+import React, { useState, lazy } from "react";
+import { Button, Typography, theme, Form, message } from "antd";
 import WeekView from "./components/WeekView";
 import IdentitySelect from "./components/IdentitySelect";
-import ActivityInput from "./components/ActivityInput";
-import ActivityList from "./components/ActivityList";
 import DownloadButton from "./components/DownloadButton";
+import {
+  StyledLayout,
+  StyledHeader,
+  StyledMainLayout,
+  StyledSider,
+  StyledContent,
+  StyledCard,
+} from "./styles/Layout.styles";
 
-const { Header, Content, Sider } = Layout;
-const { TextArea } = Input;
 const { Title } = Typography;
 
-const StyledLayout = styled(Layout)`
-  min-height: 100vh;
-
-  // 覆盖 antd 的默认样式
-  &.ant-layout-has-sider {
-    > .ant-layout {
-      height: fit-content;
-    }
-  }
-`;
-
-const StyledHeader = styled(Header)`
-  display: flex;
-  align-items: center;
-  padding: 0 24px;
-  background: #fff;
-  border-bottom: 1px solid #f0f0f0;
-  height: 64px;
-`;
-
-const StyledMainLayout = styled(Layout)`
-  min-height: calc(100vh - 64px);
-`;
-
-const StyledSider = styled(Sider)`
-  background: #fff;
-  border-right: 1px solid #f0f0f0;
-
-  .ant-layout-sider-children {
-    display: flex;
-    flex-direction: column;
-    padding: 24px;
-  }
-
-  // 覆盖 Sider 的默认宽度
-  &.ant-layout-sider {
-    width: 500px !important;
-    max-width: 500px !important;
-    min-width: 500px !important;
-  }
-`;
-
-const StyledContent = styled(Content)`
-  padding: 24px;
-  background: #fff;
-  height: fit-content;
-  min-height: 100%;
-`;
-
-const StyledCard = styled(Card)`
-  &.info-card {
-    margin-bottom: 24px;
-  }
-
-  &.activity-card {
-    margin-bottom: 24px;
-
-    .ant-card-body {
-      padding: 16px;
-    }
-  }
-
-  .ant-card-head {
-    border-bottom: 1px solid #f0f0f0;
-  }
-`;
+const ActivityInput = lazy(() => import("./components/ActivityInput"));
+const ActivityList = lazy(() => import("./components/ActivityList"));
 
 interface Activity {
   key: string;
@@ -163,7 +93,7 @@ const App: React.FC = () => {
 请生成时间表：`;
 
       const response = await fetch(
-        "http://localhost:5001/api/generate-schedule",
+        `${import.meta.env.VITE_API_BASE_URL}/api/generate-schedule`,
         {
           method: "POST",
           headers: {
@@ -208,7 +138,9 @@ const App: React.FC = () => {
             className="activity-card"
             extra={schedule && <DownloadButton schedule={schedule} />}
           >
-            <ActivityInput onSubmit={handleActivitySubmit} />
+            <React.Suspense fallback={<div>Loading...</div>}>
+              <ActivityInput onSubmit={handleActivitySubmit} />
+            </React.Suspense>
             <div
               style={{
                 margin: "16px 0",
@@ -216,10 +148,12 @@ const App: React.FC = () => {
                 overflowY: "auto",
               }}
             >
-              <ActivityList
-                activities={activities}
-                onDelete={handleActivityDelete}
-              />
+              <React.Suspense fallback={<div>Loading...</div>}>
+                <ActivityList
+                  activities={activities}
+                  onDelete={handleActivityDelete}
+                />
+              </React.Suspense>
             </div>
             <Button
               type="primary"

@@ -1,7 +1,5 @@
 import React from "react";
-import { Form, Input, TimePicker, Checkbox, Button, Space } from "antd";
-import type { Dayjs } from "dayjs";
-import dayjs from "dayjs";
+import { Form, Input, TimePicker, Checkbox, Button } from "antd";
 
 interface ActivityInputProps {
   onSubmit: (values: any) => void;
