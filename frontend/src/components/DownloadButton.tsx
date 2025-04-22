@@ -1,12 +1,15 @@
 import React from "react";
 import { Button } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
+import { useTranslation } from "react-i18next";
 
 interface DownloadButtonProps {
   schedule: string;
 }
 
 const DownloadButton: React.FC<DownloadButtonProps> = ({ schedule }) => {
+  const { t } = useTranslation();
+
   const handleDownload = () => {
     // 创建CSV内容
     const csvContent = `data:text/csv;charset=utf-8,\n${schedule}`;
@@ -25,7 +28,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ schedule }) => {
 
   return (
     <Button type="primary" icon={<DownloadOutlined />} onClick={handleDownload}>
-      下载时间表
+      {t("button.download")}
     </Button>
   );
 };

@@ -3,6 +3,7 @@ from flask_cors import CORS
 import os
 from dotenv import load_dotenv
 import requests
+import io
 
 load_dotenv()
 
@@ -32,26 +33,23 @@ def generate_schedule():
 
         userInput = request.json.get("userInput", "")
         
-        # 构建更清晰的提示词
-        prompt = f"""你是一名时间管理专家。请根据以下信息生成一个每周时间表，以CSV格式返回。
-格式要求：
-1. 第一行是表头：时间段,活动名称,重复日期
-2. 时间段格式：HH:mm-HH:mm（24小时制）
-3. 重复日期用数字表示：1-5表示周一到周五，6-7表示周末
-4. 请确保时间安排合理，不会冲突
-5. 只返回CSV格式数据，不要包含任何其他说明文字
-6. 对于重复的活动，请确保总时长符合用户要求，不要重复安排相同活动
+        # 加载提示词模板
+        try:
+            with open('prompt_templates/system_instructions.md', 'r', encoding='utf-8') as f:
+                system_instructions = f.read()
+            with open('prompt_templates/user_template.md', 'r', encoding='utf-8') as f:
+                user_template = f.read()
+        except Exception as e:
+            print(f"模板加载失败: {str(e)}")
+            return jsonify({"error": "系统配置错误"}), 500
 
-示例格式：
-时间段,活动名称,重复日期
-09:00-10:30,晨会,1-5
-12:00-13:00,午餐,1-5
-14:00-16:00,学习,6-7
+        # 构建动态提示词
+        prompt = f"""{system_instructions}
 
-用户信息：
-{userInput}
+{user_template.replace('${userInput}', userInput)}"""
 
-请生成时间表："""
+        # 添加调试日志
+        print("生成的完整提示词：\n", prompt[:500] + "..." if len(prompt) > 500 else prompt)
 
         headers = {
             "Authorization": f"Bearer {DEEPSEEK_API_KEY}",
@@ -102,4 +100,4 @@ def generate_schedule():
         }), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5001) 
+    app.run(debug=True, port=5001)

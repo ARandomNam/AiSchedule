@@ -1,5 +1,6 @@
 import React, { useState, lazy } from "react";
-import { Button, Typography, theme, Form, message } from "antd";
+import { Button, Typography, theme, Form, message, Select } from "antd";
+import { useTranslation } from "react-i18next";
 import WeekView from "./components/WeekView";
 import IdentitySelect from "./components/IdentitySelect";
 import DownloadButton from "./components/DownloadButton";
@@ -11,6 +12,9 @@ import {
   StyledContent,
   StyledCard,
 } from "./styles/Layout.styles";
+import "./i18n";
+
+const { Option } = Select;
 
 const { Title } = Typography;
 
@@ -32,6 +36,7 @@ const App: React.FC = () => {
   const [schedule, setSchedule] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const { token } = theme.useToken();
+  const { t, i18n } = useTranslation();
 
   const handleIdentityChange = (value: string) => {
     setIdentity(value);
@@ -43,7 +48,7 @@ const App: React.FC = () => {
       ...values,
     };
     setActivities([...activities, newActivity]);
-    form.resetFields();
+    form.resetFields(["name", "duration"]);
   };
 
   const handleActivityDelete = (key: string) => {
@@ -52,12 +57,12 @@ const App: React.FC = () => {
 
   const handleGenerateSchedule = async () => {
     if (!identity) {
-      message.error("请先选择您的身份");
+      message.error(t("error.identityRequired"));
       return;
     }
 
     if (activities.length === 0) {
-      message.error("请至少添加一个活动");
+      message.error(t("error.activityRequired"));
       return;
     }
 
@@ -113,7 +118,7 @@ const App: React.FC = () => {
       setSchedule(data.schedule);
     } catch (error) {
       console.error("Error:", error);
-      message.error("生成时间表失败，请稍后重试");
+      message.error(t("error.generateFailed"));
     } finally {
       setLoading(false);
     }
@@ -123,18 +128,26 @@ const App: React.FC = () => {
     <StyledLayout>
       <StyledHeader>
         <Title level={3} style={{ margin: 0, color: token.colorPrimary }}>
-          AI 智能时间表生成器
+          {t("app.title")}
         </Title>
+        <Select
+          defaultValue={i18n.language}
+          style={{ width: 100, marginLeft: "auto" }}
+          onChange={(value) => i18n.changeLanguage(value)}
+        >
+          <Option value="zh">中文</Option>
+          <Option value="en">English</Option>
+        </Select>
       </StyledHeader>
       <StyledMainLayout>
         <StyledSider width={500}>
-          <StyledCard title="基本信息" className="info-card">
+          <StyledCard title={t("card.basicInfo")} className="info-card">
             <Form form={form}>
               <IdentitySelect onIdentityChange={handleIdentityChange} />
             </Form>
           </StyledCard>
           <StyledCard
-            title="活动管理"
+            title={t("activity.management")}
             className="activity-card"
             extra={schedule && <DownloadButton schedule={schedule} />}
           >
@@ -162,7 +175,7 @@ const App: React.FC = () => {
               block
               style={{ marginTop: 16 }}
             >
-              {loading ? "生成中..." : "生成时间表"}
+              {loading ? t("button.generating") : t("button.generate")}
             </Button>
           </StyledCard>
         </StyledSider>

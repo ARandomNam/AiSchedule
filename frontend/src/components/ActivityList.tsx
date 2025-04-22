@@ -1,6 +1,7 @@
 import React from "react";
 import { Table, Button } from "antd";
 import type { ColumnsType } from "antd/es/table";
+import { useTranslation } from "react-i18next";
 
 interface Activity {
   key: string;
@@ -19,6 +20,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
   activities,
   onDelete,
 }) => {
+  const { t } = useTranslation();
   const convertDayToChinese = (day: string): string => {
     const dayMap: { [key: string]: string } = {
       monday: "周一",
@@ -34,35 +36,39 @@ const ActivityList: React.FC<ActivityListProps> = ({
 
   const columns: ColumnsType<Activity> = [
     {
-      title: "活动名称",
+      title: t("activity.name"),
       dataIndex: "name",
       key: "name",
     },
     {
-      title: "时长（小时）",
+      title: t("activity.duration"),
       dataIndex: "duration",
       key: "duration",
     },
     {
-      title: "时间段",
+      title: t("activity.timeRange"),
       key: "timeRange",
       render: (_, record) =>
         record.timeRange
-          ? `${record.timeRange[0]} - ${record.timeRange[1]}`
-          : "不指定",
+          ? `${t("activity.between")} ${record.timeRange[0]}-${
+              record.timeRange[1]
+            } ${t("activity.and")}`
+          : t("activity.flexible"),
     },
     {
-      title: "重复日期",
+      title: t("activity.days"),
       key: "days",
       render: (_, record) =>
-        record.days.map((day) => convertDayToChinese(day)).join("、"),
+        `${t("activity.at")} ${record.days
+          .map(convertDayToChinese)
+          .join("、")} ${t("activity.conduct")}`,
     },
     {
-      title: "操作",
+      title: t("activity.delete"),
       key: "action",
       render: (_, record) => (
         <Button type="link" danger onClick={() => onDelete(record.key)}>
-          删除
+          {t("activity.delete")}
         </Button>
       ),
     },

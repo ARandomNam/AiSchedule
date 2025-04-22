@@ -1,5 +1,6 @@
 import React from "react";
 import { Form, Input, TimePicker, Checkbox, Button } from "antd";
+import { useTranslation } from "react-i18next";
 
 interface ActivityInputProps {
   onSubmit: (values: any) => void;
@@ -7,6 +8,7 @@ interface ActivityInputProps {
 
 const ActivityInput: React.FC<ActivityInputProps> = ({ onSubmit }) => {
   const [form] = Form.useForm();
+  const { t } = useTranslation();
 
   const handleSubmit = (values: any) => {
     // 处理时间范围
@@ -31,40 +33,40 @@ const ActivityInput: React.FC<ActivityInputProps> = ({ onSubmit }) => {
       }}
     >
       <Form.Item
-        label="活动名称"
+        label={t("activity.name")}
         name="name"
-        rules={[{ required: true, message: "请输入活动名称" }]}
+        rules={[{ required: true, message: t("activity.nameRequired") }]}
       >
         <Input placeholder="例如：学习、工作、运动等" />
       </Form.Item>
 
       <Form.Item
-        label="活动时长（小时）"
+        label={t("activity.duration")}
         name="duration"
-        rules={[{ required: true, message: "请输入活动时长" }]}
+        rules={[{ required: true, message: t("activity.durationRequired") }]}
       >
         <Input type="number" min={0.5} step={0.5} />
       </Form.Item>
 
-      <Form.Item label="特定时间段" name="timeRange">
+      <Form.Item label={t("activity.timeRange")} name="timeRange">
         <TimePicker.RangePicker format="HH:mm" />
       </Form.Item>
 
-      <Form.Item label="重复日期" name="days">
+      <Form.Item label={t("activity.days")} name="days">
         <Checkbox.Group>
-          <Checkbox value="monday">周一</Checkbox>
-          <Checkbox value="tuesday">周二</Checkbox>
-          <Checkbox value="wednesday">周三</Checkbox>
-          <Checkbox value="thursday">周四</Checkbox>
-          <Checkbox value="friday">周五</Checkbox>
-          <Checkbox value="saturday">周六</Checkbox>
-          <Checkbox value="sunday">周日</Checkbox>
+          <Checkbox value="monday">{t("weekdays.monday")}</Checkbox>
+          <Checkbox value="tuesday">{t("weekdays.tuesday")}</Checkbox>
+          <Checkbox value="wednesday">{t("weekdays.wednesday")}</Checkbox>
+          <Checkbox value="thursday">{t("weekdays.thursday")}</Checkbox>
+          <Checkbox value="friday">{t("weekdays.friday")}</Checkbox>
+          <Checkbox value="saturday">{t("weekdays.saturday")}</Checkbox>
+          <Checkbox value="sunday">{t("weekdays.sunday")}</Checkbox>
         </Checkbox.Group>
       </Form.Item>
 
       <Form.Item>
         <Button type="primary" htmlType="submit">
-          添加活动
+          {t("activity.add")}
         </Button>
       </Form.Item>
     </Form>

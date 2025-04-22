@@ -1,0 +1,64 @@
+{
+  "app": {
+    "title": "AI Smart Schedule Generator"
+  },
+  "identity": {
+    "label": "Your Identity",
+    "placeholder": "e.g.: Student, Frontend Intern, Freelancer, etc.",
+    "required": "Please enter your identity"
+  },
+  "activity": {
+    "management": "Activity Management",
+    "name": "Activity Name",
+    "duration": "Duration (hours)",
+    "timeRange": "Specific Time Range",
+    "days": "Repeat Days",
+    "add": "Add Activity",
+    "delete": "Delete",
+    "nameRequired": "Please enter activity name",
+    "durationRequired": "Please enter activity duration",
+    "flexible": "Flexible Time",
+    "between": "Between",
+    "and": "and",
+    "at": "On",
+    "conduct": "conduct"
+  },
+  "weekdays": {
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday"
+  },
+  "calendar": {
+    "week": "Week",
+    "work_week": "Work Week",
+    "day": "Day",
+    "month": "Month",
+    "previous": "Previous",
+    "next": "Next",
+    "today": "Today",
+    "agenda": "Agenda",
+    "date": "Date",
+    "time": "Time",
+    "event": "Event",
+    "allDay": "All Day",
+    "noEventsInRange": "No events in this range"
+  },
+  "button": {
+    "generate": "Generate Schedule",
+    "generating": "Generating...",
+    "download": "Download Schedule"
+  },
+  "card": {
+    "basicInfo": "Basic Information"
+  },
+  "error": {
+    "identityRequired": "Please select your identity first",
+    "activityRequired": "Please add at least one activity",
+    "generateFailed": "Failed to generate schedule, please try again later"
+  },
+  "loading": "Loading..."
+}

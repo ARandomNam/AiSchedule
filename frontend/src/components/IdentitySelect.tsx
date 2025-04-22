@@ -1,5 +1,6 @@
 import React from "react";
 import { Input, Form } from "antd";
+import { useTranslation } from "react-i18next";
 
 interface IdentitySelectProps {
   onIdentityChange: (identity: string) => void;
@@ -8,14 +9,16 @@ interface IdentitySelectProps {
 const IdentitySelect: React.FC<IdentitySelectProps> = ({
   onIdentityChange,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <Form.Item
-      label="您的身份"
+      label={t("identity.label")}
       name="identity"
-      rules={[{ required: true, message: "请输入您的身份" }]}
+      rules={[{ required: true, message: t("identity.required") }]}
     >
       <Input
-        placeholder="例如：学生、前端实习生、自由职业者等"
+        placeholder={t("identity.placeholder")}
         onChange={(e) => onIdentityChange(e.target.value)}
       />
     </Form.Item>

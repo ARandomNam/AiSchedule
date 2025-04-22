@@ -1,9 +1,10 @@
 import React from "react";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import { format, parse, startOfWeek, getDay } from "date-fns";
-import { zhCN } from "date-fns/locale";
+import { zhCN, enUS } from "date-fns/locale";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { StyledCalendarWrapper } from "../styles/WeekView.styles";
+import { useTranslation } from "react-i18next";
 
 interface WeekViewProps {
   schedule: string;
@@ -17,35 +18,38 @@ interface CalendarEvent {
   resource?: any;
 }
 
-const messages = {
-  week: "周",
-  work_week: "工作周",
-  day: "日",
-  month: "月",
-  previous: "上一页",
-  next: "下一页",
-  today: "今天",
-  agenda: "日程",
-  date: "日期",
-  time: "时间",
-  event: "事件",
-  allDay: "全天",
-  noEventsInRange: "此时间段无事件",
-};
-
-const locales = {
-  "zh-CN": zhCN,
-};
-
-const localizer = dateFnsLocalizer({
-  format,
-  parse,
-  startOfWeek: () => startOfWeek(new Date(), { weekStartsOn: 1 }), // 从周一开始
-  getDay,
-  locales,
-});
-
 const WeekView: React.FC<WeekViewProps> = ({ schedule }) => {
+  const { t, i18n } = useTranslation();
+
+  const messages = {
+    week: t("calendar.week"),
+    work_week: t("calendar.work_week"),
+    day: t("calendar.day"),
+    month: t("calendar.month"),
+    previous: t("calendar.previous"),
+    next: t("calendar.next"),
+    today: t("calendar.today"),
+    agenda: t("calendar.agenda"),
+    date: t("calendar.date"),
+    time: t("calendar.time"),
+    event: t("calendar.event"),
+    allDay: t("calendar.allDay"),
+    noEventsInRange: t("calendar.noEventsInRange"),
+  };
+
+  const locales = {
+    zh: zhCN,
+    en: enUS,
+  };
+
+  const localizer = dateFnsLocalizer({
+    format,
+    parse,
+    startOfWeek: () => startOfWeek(new Date(), { weekStartsOn: 1 }), // 从周一开始
+    getDay,
+    locales,
+  });
+
   const parseSchedule = (scheduleText: string): CalendarEvent[] => {
     const events: CalendarEvent[] = [];
     const lines = scheduleText.split("\n").filter((line) => line.trim());
